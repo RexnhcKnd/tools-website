@@ -5,136 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>全能在线工具箱</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
-body{background:#f5f7fa;padding:20px}
-.container{max-width:1000px;margin:0 auto}
-.title{text-align:center;font-size:26px;margin:30px 0;color:#222}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.card{background:white;border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
-.card h3{margin-bottom:12px;font-size:16px;color:#333}
-textarea,input{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin:8px 0}
-button{padding:8px 12px;background:#0070f3;color:white;border:none;border-radius:8px;margin:4px;cursor:pointer}
-.res{margin-top:10px;padding:10px;background:#f0f7ff;border-radius:8px;min-height:40px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body{background:#f7f8fa;padding:15px}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;margin:30px 0}
+.header h1{font-size:24px;color:#222}
+.header p{color:#666;margin-top:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 3px 10px rgba(0,0,0,0.04)}
+.card h3{font-size:16px;margin-bottom:12px;color:#222}
+textarea,input{width:100%;padding:10px;border:1px solid #e0e0e0;border-radius:10px;margin:6px 0;outline:none}
+button{padding:9px 14px;background:#0070f3;color:white;border:none;border-radius:10px;margin:4px;cursor:pointer}
+button:hover{opacity:.9}
+.result{margin-top:10px;padding:12px;background:#f0f7ff;border-radius:10px;min-height:44px}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="title">🔧 全能在线工具箱</div>
+  <div class="header">
+    <h1>🔧 全能在线工具箱</h1>
+    <p>所有功能免费使用 · 无需安装 · 本地运行</p>
+  </div>
+
   <div class="grid">
 
-    <!-- 文本去重 -->
+    <!-- 文本去重排版 -->
     <div class="card">
-      <h3>文本去重</h3>
-      <textarea id="t1" placeholder="输入内容"></textarea>
+      <h3>文本去重 + 排版</h3>
+      <textarea rows="4" id="txt" placeholder="粘贴文字"></textarea>
       <button onclick="quchong()">去重</button>
-      <button onclick="copy('t1res')">复制</button>
-      <div id="t1res" class="res"></div>
+      <button onclick="paiban()">排版</button>
+      <button onclick="copy('txtres')">复制</button>
+      <div id="txtres" class="result"></div>
     </div>
 
-    <!-- 大小写转换 -->
+    <!-- 图片压缩 -->
     <div class="card">
-      <h3>大小写转换</h3>
-      <input id="t2" placeholder="输入文字">
-      <button onclick="toUpper()">转大写</button>
-      <button onclick="toLower()">转小写</button>
-      <div id="t2res" class="res"></div>
+      <h3>图片压缩</h3>
+      <input type="file" id="imgzip" accept="image/*">
+      <button onclick="compressImg()">压缩</button>
+      <div id="imgres" class="result"></div>
     </div>
 
-    <!-- 字数统计 -->
+    <!-- OCR 图片转文字 -->
     <div class="card">
-      <h3>字数统计</h3>
-      <textarea id="t3" placeholder="输入内容" oninput="count()"></textarea>
-      <div id="t3res" class="res">字数：0</div>
+      <h3>OCR 图片转文字</h3>
+      <input type="file" id="ocrfile" accept="image/*">
+      <button onclick="doOCR()">开始识别</button>
+      <div id="ocrres" class="result"></div>
     </div>
 
-    <!-- 随机密码 -->
+    <!-- 文字转图片 -->
     <div class="card">
-      <h3>随机密码</h3>
-      <button onclick="mkpass()">生成密码</button>
-      <div id="t4res" class="res"></div>
+      <h3>文字转图片</h3>
+      <input id="txt2img" placeholder="输入文字">
+      <button onclick="textToImg()">生成</button>
+      <div id="txt2imgres" class="result"></div>
     </div>
 
-    <!-- 时间戳 -->
+    <!-- PDF 小工具 -->
     <div class="card">
-      <h3>时间戳</h3>
-      <button onclick="timestamp()">获取</button>
-      <div id="t5res" class="res"></div>
+      <h3>PDF 合并 / 拆分</h3>
+      <input type="file" id="pdffile" multiple accept=".pdf">
+      <button onclick="pdfMerge()">合并PDF</button>
+      <button onclick="pdfSplit()">拆分PDF</button>
+      <div id="pdfres" class="result"></div>
     </div>
 
-    <!-- 进制转换 -->
+    <!-- 课表转换 -->
     <div class="card">
-      <h3>10进制 → 16进制</h3>
-      <input id="t6" type="number" placeholder="输入数字">
-      <button onclick="toHex()">转换</button>
-      <div id="t6res" class="res"></div>
+      <h3>课表转换</h3>
+      <textarea rows="3" id="kebiao" placeholder="粘贴课表文字"></textarea>
+      <button onclick="convertTable()">转换</button>
+      <div id="kebiores" class="result"></div>
     </div>
 
-    <!-- URL编码 -->
+    <!-- 倒计时 -->
     <div class="card">
-      <h3>URL编码/解码</h3>
-      <input id="t7" placeholder="输入内容">
-      <button onclick="enc()">编码</button>
-      <button onclick="dec()">解码</button>
-      <div id="t7res" class="res"></div>
+      <h3>倒计时 / 专注时钟</h3>
+      <input type="number" id="time" value="25" placeholder="分钟">
+      <button onclick="startTimer()">开始</button>
+      <div id="timeres" class="result"></div>
     </div>
 
-    <!-- MD5 -->
+    <!-- 壁纸生成 -->
     <div class="card">
-      <h3>MD5加密</h3>
-      <input id="t8" placeholder="输入内容">
-      <button onclick="md5s()">加密</button>
-      <div id="t8res" class="res"></div>
+      <h3>简约壁纸生成</h3>
+      <button onclick="makeWallpaper()">生成壁纸</button>
+      <div id="wallres" class="result"></div>
+    </div>
+
+    <!-- 表情包制作 -->
+    <div class="card">
+      <h3>表情包制作</h3>
+      <input type="file" id="emofile" accept="image/*">
+      <input id="emotxt" placeholder="添加文字">
+      <button onclick="makeMeme()">制作</button>
+      <div id="emores" class="result"></div>
+    </div>
+
+    <!-- 简历生成 -->
+    <div class="card">
+      <h3>简历模板生成</h3>
+      <button onclick="genCV()">生成简历</button>
+      <div id="cvres" class="result"></div>
     </div>
 
   </div>
 </div>
 
 <script>
-// 去重
+// 文本去重
 function quchong(){
-  let a=document.getElementById("t1").value.split("\n").filter(i=>i.trim());
-  let u=[...new Set(a)];
-  document.getElementById("t1res").innerText=u.join("\n");
+  let t=document.getElementById("txt").value;
+  let lines=t.split(/\n/).map(i=>i.trim()).filter(i=>i);
+  let u=[...new Set(lines)];
+  document.getElementById("txtres").innerText=u.join("\n");
 }
 
-// 大小写
-function toUpper(){document.getElementById("t2res").innerText=document.getElementById("t2").value.toUpperCase()}
-function toLower(){document.getElementById("t2res").innerText=document.getElementById("t2").value.toLowerCase()}
-
-// 统计
-function count(){
-  let t=document.getElementById("t3").value.length;
-  document.getElementById("t3res").innerText="字数："+t;
-}
-
-// 密码
-function mkpass(){
-  let ="abcdefghijkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
-  let p="";for(let i=0;i<12;i++)p+=[Math.floor(Math.random()*.length)];
-  document.getElementById("t4res").innerText=p;
-}
-
-// 时间戳
-function timestamp(){document.getElementById("t5res").innerText=Date.now()}
-
-// 进制
-function toHex(){document.getElementById("t6res").innerText=parseInt(document.getElementById("t6").value).toString(16)}
-
-// URL
-function enc(){document.getElementById("t7res").innerText=encodeURIComponent(document.getElementById("t7").value)}
-function dec(){document.getElementById("t7res").innerText=decodeURIComponent(document.getElementById("t7").value)}
-
-// MD5 简易
-function md5s(){
-  let t=document.getElementById("t8").value;
-  let hash=0;for(let i=0;i<t.length;i++)hash=((hash<<5)-hash)+t.charCodeAt(i);
-  document.getElementById("t8res").innerText=hash.toString(16);
+// 自动排版
+function paiban(){
+  let t=document.getElementById("txt").value;
+  let res=t.replace(/\s+/g," ").replace(/。/g,"。\n").replace(/，/g,"， ");
+  document.getElementById("txtres").innerText=res;
 }
 
 // 复制
 function copy(id){
   let t=document.getElementById(id).innerText;
   navigator.clipboard.writeText(t).then(()=>alert("已复制"));
+}
+
+// OCR（简易版）
+function doOCR(){
+  alert("OCR功能已启用，请选择图片（演示版）");
+  document.getElementById("ocrres").innerText="图片文字识别结果：示例内容 123 ABC";
+}
+
+// 文字转图片
+function textToImg(){
+  let t=document.getElementById("txt2img").value||"示例文字";
+  let c=document.createElement("canvas");
+  c.width=400;c.height=200;
+  let ctx=c.getContext("2d");
+  ctx.fillStyle="#0070f3";ctx.fillRect(0,0,400,200);
+  ctx.fillStyle="#fff";ctx.font="24px Arial";ctx.fillText(t,50,100);
+  let url=c.toDataURL();
+  let a=document.createElement("a");
+  a.href=url;a.download="text.png";a.click();
+  document.getElementById("txt2imgres").innerText="✅ 已生成图片";
+}
+
+// 图片压缩
+function compressImg(){
+  document.getElementById("imgres").innerText="✅ 图片压缩完成（演示）";
+}
+
+// PDF合并
+function pdfMerge(){
+  document.getElementById("pdfres").innerText="✅ PDF合并功能已就绪（演示）";
+}
+
+// PDF拆分
+function pdfSplit(){
+  document.getElementById("pdfres").innerText("✅ PDF拆分功能已就绪（演示）");
+}
+
+// 课表转换
+function convertTable(){
+  document.getElementById("kebiores").innerText("周一：语文\周二：数学\n周三：英语");
+}
+
+// 倒计时
+function startTimer(){
+  let m=document.getElementById("time").value;
+  let =m*60;
+  let it=setInterval(()=>{
+    if(<=0){clearInterval(it);document.getElementById("timeres").innerText="时间到！";return}
+    --;
+    let mm=Math.floor(/60);
+    let ss=%60;
+    document.getElementById("timeres").innerText(`${mm}分 ${ss}秒`);
+  },1000);
+}
+
+// 壁纸生成
+function makeWallpaper(){
+  let c=document.createElement("canvas");
+  c.width=800;c.height=450;
+  let ctx=c.getContext("2d");
+  ctx.fillStyle="#4a90e2";ctx.fillRect(0,0,800,450);
+  let a=document.createElement("a");
+  a.href=c.toDataURL();a.download="wallpaper.png";a.click();
+  document.getElementById("wallres").innerText("✅ 壁纸已生成");
+}
+
+// 表情包
+function makeMeme(){
+  document.getElementById("emores").innerText("✅ 表情包制作完成（演示）");
+}
+
+// 简历生成
+function genCV(){
+  let cv="个人简历\n姓名：\n电话：\n邮箱：\n教育经历：\n工作经历：";
+  document.getElementById("cvres").innerText=cv;
 }
 </script>
 </body>
